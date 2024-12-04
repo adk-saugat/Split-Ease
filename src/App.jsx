@@ -1,12 +1,12 @@
+import { Route, Routes } from "react-router-dom"
 import "./App.scss"
-import Header from "./components/Header/Header"
+import LandingPage from "./routes/LandingPage/LandingPage"
 
 function App() {
   return (
-    <div>
-      <Header />
-      
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+    </Routes>
   )
 }
 

@@ -1,12 +1,18 @@
-import "./LoginPage.scss"
+import "./SignUpPage.scss"
 import { useNavigate } from "react-router"
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const navigate = useNavigate()
   return (
     <div className="login-container">
-      <h2 className="login-header">Login</h2>
+      <h2 className="login-header">Sign Up</h2>
       <form className="login-form">
+        <input
+          className="email-input"
+          type="text"
+          placeholder="Display Name"
+          required
+        />
         <input
           className="email-input"
           type="username"
@@ -33,4 +39,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default SignUpPage

@@ -2,7 +2,11 @@ import "./LoginPage.scss"
 
 import { useState } from "react"
 import { useNavigate } from "react-router"
-import { googleSignIn, emailPasswordSignIn } from "../../utils/firebase-utils"
+import {
+  googleSignIn,
+  emailPasswordSignIn,
+  createUserDocument,
+} from "../../utils/firebase-utils"
 
 const LoginPage = () => {
   const [email, setEmail] = useState("")

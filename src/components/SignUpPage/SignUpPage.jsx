@@ -32,9 +32,8 @@ const SignUpPage = () => {
     }
 
     try {
-      await emailPasswordSignUp(email, password)
+      const response = await emailPasswordSignUp(email, password)
       resetForm()
-      console.log("done")
     } catch (error) {
       console.log(error)
     }

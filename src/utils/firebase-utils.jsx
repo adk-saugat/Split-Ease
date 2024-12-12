@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app"
+import { collection, addDoc, getFirestore } from "firebase/firestore"
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -16,6 +17,8 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
+
+// Authentication
 
 const app = initializeApp(firebaseConfig)
 const googleProvider = new GoogleAuthProvider()
@@ -36,4 +39,13 @@ export const emailPasswordSignUp = async (email, password) => {
   if (!email || !password) return
 
   return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+// FireStore Database
+
+export const db = getFirestore(app)
+
+export const createUserDocument = async () => {
+  const collectionRef = collection(db, "user")
+  await addDoc(collectionRef, { name: "Saugat" })
 }

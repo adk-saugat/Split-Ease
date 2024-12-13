@@ -5,27 +5,35 @@ import { useNavigate } from "react-router"
 import {
   googleSignIn,
   emailPasswordSignIn,
-  createUserDocument,
 } from "../../utils/firebase-utils"
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [userEmail, setEmail] = useState("")
+  const [userPassword, setPassword] = useState("")
   const navigate = useNavigate()
+
+  const resetForm = () => {
+    setEmail("")
+    setPassword("")
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault()
 
     try {
-      await emailPasswordSignIn(email, password)
-      console.log("done")
+      await emailPasswordSignIn(userEmail, userPassword)
+      resetForm()
     } catch (error) {
-      console.log(error)
+      if (error.code === "auth/invalid-credential") {
+        console.log("Invalid User Credential!")
+      }
     }
   }
 
-  const handleGoogleSignIn = () => {
-    googleSignIn()
+  const handleGoogleSignIn = async () => {
+    const { user } = await googleSignIn()
+    const { email, uid } = user
+    createUserDocument(email, uid)
   }
 
   return (
@@ -36,6 +44,7 @@ const LoginPage = () => {
           className="email-input"
           type="username"
           placeholder="Email"
+          value={userEmail}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
@@ -43,6 +52,7 @@ const LoginPage = () => {
           className="password-input"
           type="password"
           placeholder="Password"
+          value={userPassword}
           onChange={(e) => setPassword(e.target.value)}
           required
         />

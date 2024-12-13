@@ -1,18 +1,22 @@
 import { useState } from "react"
-import { emailPasswordSignUp, googleSignIn } from "../../utils/firebase-utils"
+import {
+  emailPasswordSignUp,
+  googleSignIn,
+  createUserDocument,
+} from "../../utils/firebase-utils"
 import "./SignUpPage.scss"
 import { useNavigate } from "react-router"
 
 const defaultFormField = {
   name: "",
-  email: "",
-  password: "",
+  userEmail: "",
+  userPassword: "",
   confirmPassword: "",
 }
 
 const SignUpPage = () => {
   const [field, setField] = useState(defaultFormField)
-  const { name, email, password, confirmPassword } = field
+  const { name, userEmail, userPassword, confirmPassword } = field
 
   const handleFormChange = (event) => {
     const { name, value } = event.target
@@ -26,23 +30,27 @@ const SignUpPage = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault()
 
-    if (password !== confirmPassword) {
+    if (userPassword !== confirmPassword) {
       alert("passwords doesnot match!")
       return
     }
 
     try {
-      const response = await emailPasswordSignUp(email, password)
+      const { user } = await emailPasswordSignUp(userEmail, userPassword)
+      const { email, uid } = user
+      createUserDocument(email, uid)
       resetForm()
     } catch (error) {
-      console.log(error)
+      console.log(error.code)
     }
   }
 
   const navigate = useNavigate()
 
-  const handleGoogleSignIn = () => {
-    googleSignIn()
+  const handleGoogleSignIn = async () => {
+    const { user } = await googleSignIn()
+    const { email, uid } = user
+    createUserDocument(email, uid)
   }
 
   return (
@@ -62,8 +70,8 @@ const SignUpPage = () => {
           className="email-input"
           type="username"
           placeholder="Email"
-          name="email"
-          value={email}
+          name="userEmail"
+          value={userEmail}
           onChange={handleFormChange}
           required
         />
@@ -71,8 +79,8 @@ const SignUpPage = () => {
           className="password-input"
           type="password"
           placeholder="Password"
-          name="password"
-          value={password}
+          name="userPassword"
+          value={userPassword}
           onChange={handleFormChange}
           required
         />

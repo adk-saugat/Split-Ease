@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app"
-import { collection, addDoc, getFirestore } from "firebase/firestore"
+import {
+  collection,
+  getDoc,
+  getFirestore,
+  setDoc,
+  doc,
+} from "firebase/firestore"
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -45,7 +51,11 @@ export const emailPasswordSignUp = async (email, password) => {
 
 export const db = getFirestore(app)
 
-export const createUserDocument = async () => {
+export const createUserDocument = async (email, uid) => {
   const collectionRef = collection(db, "user")
-  await addDoc(collectionRef, { name: "Saugat" })
+
+  const docRef = doc(collectionRef, uid)
+  const docSnapshot = await getDoc(docRef)
+  !docSnapshot.exists() &&
+    (await setDoc(doc(collectionRef, uid), { email, uid }))
 }

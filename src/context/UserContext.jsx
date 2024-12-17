@@ -13,10 +13,15 @@ const UserProvider = ({ children }) => {
   }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setActiveUser(currentUser)
+      if (currentUser) {
+        const { displayName, uid, email } = currentUser
+        setActiveUser({ displayName, uid, email })
+      } else {
+        setActiveUser(null)
+      }
     })
     return unsubscribe
-  })
+  }, [])
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 export default UserProvider

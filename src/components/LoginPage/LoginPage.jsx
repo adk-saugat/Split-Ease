@@ -5,6 +5,7 @@ import { useNavigate } from "react-router"
 import {
   googleSignIn,
   emailPasswordSignIn,
+  createUserDocument,
 } from "../../utils/firebase-utils"
 
 const LoginPage = () => {
@@ -23,6 +24,7 @@ const LoginPage = () => {
     try {
       await emailPasswordSignIn(userEmail, userPassword)
       resetForm()
+      navigate("/dashboard")
     } catch (error) {
       if (error.code === "auth/invalid-credential") {
         console.log("Invalid User Credential!")
@@ -34,6 +36,7 @@ const LoginPage = () => {
     const { user } = await googleSignIn()
     const { email, uid } = user
     createUserDocument(email, uid)
+    navigate("/dashboard")
   }
 
   return (

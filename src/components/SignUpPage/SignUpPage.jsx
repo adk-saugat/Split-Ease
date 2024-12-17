@@ -5,7 +5,8 @@ import {
   createUserDocument,
 } from "../../utils/firebase-utils"
 import "./SignUpPage.scss"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
+import { updateProfile } from "firebase/auth"
 
 const defaultFormField = {
   name: "",
@@ -17,6 +18,7 @@ const defaultFormField = {
 const SignUpPage = () => {
   const [field, setField] = useState(defaultFormField)
   const { name, userEmail, userPassword, confirmPassword } = field
+  const navigate = useNavigate()
 
   const handleFormChange = (event) => {
     const { name, value } = event.target
@@ -37,20 +39,24 @@ const SignUpPage = () => {
 
     try {
       const { user } = await emailPasswordSignUp(userEmail, userPassword)
+      updateProfile(user, {
+        displayName: name,
+      })
       const { email, uid } = user
-      createUserDocument(email, uid)
       resetForm()
+      createUserDocument(email, uid)
+      navigate("/dashboard")
     } catch (error) {
       console.log(error.code)
     }
   }
 
-  const navigate = useNavigate()
-
   const handleGoogleSignIn = async () => {
     const { user } = await googleSignIn()
+    console.log(user)
     const { email, uid } = user
     createUserDocument(email, uid)
+    navigate("/dashboard")
   }
 
   return (

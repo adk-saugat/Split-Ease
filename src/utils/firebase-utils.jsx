@@ -12,6 +12,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -45,6 +46,10 @@ export const emailPasswordSignUp = async (email, password) => {
   if (!email || !password) return
 
   return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const signOutUser = async () => {
+  await signOut(auth)
 }
 
 // FireStore Database

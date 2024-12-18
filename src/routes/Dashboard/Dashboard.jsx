@@ -1,10 +1,15 @@
 import { Link, useNavigate } from "react-router-dom"
 import "./Dashboard.scss"
 import { signOutUser } from "../../utils/firebase-utils"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { UserContext } from "../../context/UserContext"
+import Groups from "../../components/Groups/Groups"
+import AddExpense from "../../components/AddExpense/AddExpense"
+import Friends from "../../components/Friends/Friends"
 
 const Dashboard = () => {
+  const [tab, setTab] = useState("groups")
+
   const navigate = useNavigate()
   const handleSignOut = async () => {
     try {
@@ -27,11 +32,24 @@ const Dashboard = () => {
         </button>
       </header>
       <nav className="dash-nav">
-        <button className="dash-nav-btn">Groups</button>
-        <button className="dash-nav-btn">Add Expense</button>
-        <button className="dash-nav-btn friends-nav">Friends</button>
+        <button className="dash-nav-btn" onClick={() => setTab("groups")}>
+          Groups
+        </button>
+        <button className="dash-nav-btn" onClick={() => setTab("expense")}>
+          Add Expense
+        </button>
+        <button
+          className="dash-nav-btn friends-nav"
+          onClick={() => setTab("friends")}
+        >
+          Friends
+        </button>
       </nav>
-      <section>transactions</section>
+      <section>
+        <div>{tab === "groups" && <Groups />}</div>
+        <div>{tab === "expense" && <AddExpense />}</div>
+        <div>{tab === "friends" && <Friends />}</div>
+      </section>
     </div>
   )
 }

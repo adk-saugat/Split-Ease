@@ -27,7 +27,7 @@ const LoginPage = () => {
       navigate("/dashboard")
     } catch (error) {
       if (error.code === "auth/invalid-credential") {
-        console.log("Invalid User Credential!")
+        alert("User doesnot exist or Wrong Username/Password!")
       }
     }
   }

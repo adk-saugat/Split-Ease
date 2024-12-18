@@ -13,6 +13,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -46,6 +47,11 @@ export const emailPasswordSignUp = async (email, password) => {
   if (!email || !password) return
 
   return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const updateUserProfile = async (name) => {
+  await updateProfile(auth.currentUser, { displayName: name })
+  await auth.currentUser.reload()
 }
 
 export const signOutUser = async () => {

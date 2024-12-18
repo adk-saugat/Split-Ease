@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import {
   emailPasswordSignUp,
   googleSignIn,
   createUserDocument,
+  updateUserProfile,
 } from "../../utils/firebase-utils"
 import "./SignUpPage.scss"
 import { useNavigate } from "react-router-dom"
-import { updateProfile } from "firebase/auth"
+import { UserContext } from "../../context/UserContext"
 
 const defaultFormField = {
   name: "",
@@ -29,6 +30,8 @@ const SignUpPage = () => {
     setField(defaultFormField)
   }
 
+  const { activeUser, setActiveUser } = useContext(UserContext)
+
   const handleFormSubmit = async (event) => {
     event.preventDefault()
 
@@ -39,9 +42,8 @@ const SignUpPage = () => {
 
     try {
       const { user } = await emailPasswordSignUp(userEmail, userPassword)
-      updateProfile(user, {
-        displayName: name,
-      })
+      setActiveUser({ ...activeUser, displayName: name })
+      await updateUserProfile(name)
       const { email, uid } = user
       resetForm()
       createUserDocument(email, uid)
@@ -53,7 +55,6 @@ const SignUpPage = () => {
 
   const handleGoogleSignIn = async () => {
     const { user } = await googleSignIn()
-    console.log(user)
     const { email, uid } = user
     createUserDocument(email, uid)
     navigate("/dashboard")

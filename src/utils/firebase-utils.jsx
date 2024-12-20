@@ -62,11 +62,11 @@ export const signOutUser = async () => {
 
 export const db = getFirestore(app)
 
-export const createUserDocument = async (email, uid) => {
+export const createUserDocument = async (uid, displayName, email) => {
   const collectionRef = collection(db, "user")
 
   const docRef = doc(collectionRef, uid)
   const docSnapshot = await getDoc(docRef)
   !docSnapshot.exists() &&
-    (await setDoc(doc(collectionRef, uid), { email, uid }))
+    (await setDoc(doc(collectionRef, uid), { uid, displayName, email }))
 }

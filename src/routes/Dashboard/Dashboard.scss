@@ -51,6 +51,7 @@
       justify-content: center;
       background-color: white;
       box-shadow: 2px 0px rgba(17, 17, 26, 0.1);
+      margin-right: 2px;
       border: none;
       font-size: 1rem;
       padding: 0.5rem;
@@ -64,6 +65,17 @@
 
     .friends-nav {
       box-shadow: none;
+      margin-right: 0px;
     }
+
+    .active {
+      background-color: #212529;
+      color: white;
+    }
+  }
+
+  .transactions {
+    width: 100%;
+    padding: 1rem;
   }
 }

@@ -32,20 +32,28 @@ const Dashboard = () => {
         </button>
       </header>
       <nav className="dash-nav">
-        <button className="dash-nav-btn" onClick={() => setTab("groups")}>
+        <button
+          className={`dash-nav-btn ${tab === "groups" && "active"}`}
+          onClick={() => setTab("groups")}
+        >
           Groups
         </button>
-        <button className="dash-nav-btn" onClick={() => setTab("expense")}>
+        <button
+          className={`dash-nav-btn ${tab === "expense" && "active"}`}
+          onClick={() => setTab("expense")}
+        >
           Add Expense
         </button>
         <button
-          className="dash-nav-btn friends-nav"
+          className={`dash-nav-btn friends-nav ${
+            tab === "friends" && "active"
+          }`}
           onClick={() => setTab("friends")}
         >
           Friends
         </button>
       </nav>
-      <section>
+      <section className="transactions">
         <div>{tab === "groups" && <Groups />}</div>
         <div>{tab === "expense" && <AddExpense />}</div>
         <div>{tab === "friends" && <Friends />}</div>

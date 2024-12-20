@@ -34,8 +34,8 @@ const LoginPage = () => {
 
   const handleGoogleSignIn = async () => {
     const { user } = await googleSignIn()
-    const { email, uid } = user
-    createUserDocument(email, uid)
+    const { email, uid, displayName } = user
+    createUserDocument(uid, displayName, email)
     navigate("/dashboard")
   }
 

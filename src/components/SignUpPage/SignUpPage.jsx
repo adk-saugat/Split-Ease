@@ -46,7 +46,7 @@ const SignUpPage = () => {
       await updateUserProfile(name)
       const { email, uid } = user
       resetForm()
-      createUserDocument(email, uid)
+      createUserDocument(uid, name, email)
       navigate("/dashboard")
     } catch (error) {
       console.log(error.code)
@@ -55,8 +55,8 @@ const SignUpPage = () => {
 
   const handleGoogleSignIn = async () => {
     const { user } = await googleSignIn()
-    const { email, uid } = user
-    createUserDocument(email, uid)
+    const { email, uid, displayName } = user
+    createUserDocument(uid, displayName, email)
     navigate("/dashboard")
   }
 

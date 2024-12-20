@@ -53,11 +53,11 @@ const Dashboard = () => {
           Friends
         </button>
       </nav>
-      <section className="transactions">
-        <div>{tab === "groups" && <Groups />}</div>
-        <div>{tab === "expense" && <AddExpense />}</div>
-        <div>{tab === "friends" && <Friends />}</div>
-      </section>
+      <div className="transactions">
+        {tab === "groups" && <Groups />}
+        {tab === "expense" && <AddExpense setTab={setTab} />}
+        {tab === "friends" && <Friends />}
+      </div>
     </div>
   )
 }

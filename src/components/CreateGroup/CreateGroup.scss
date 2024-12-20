@@ -1,0 +1,42 @@
+.back-arrow {
+  border: none;
+  background-color: white;
+  padding: 0px 2px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  transition: 100ms;
+  margin-bottom: 1rem;
+
+  &:hover {
+    background-color: black;
+    border-radius: 5px;
+    color: white;
+  }
+}
+
+.group-form {
+  padding-left: 1rem;
+  width: 100%;
+
+  .field-header {
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(17, 17, 26, 0.1);
+    padding-bottom: 2px;
+    font-size: 1.2rem;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 1rem;
+    margin: 10px 0px;
+    font-weight: 500;
+  }
+
+  .add-group-field {
+    font-size: 1rem;
+    padding: 5px;
+  }
+}

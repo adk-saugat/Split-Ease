@@ -1,12 +1,9 @@
 import { useState } from "react"
 import "./Groups.scss"
+import CreateGroup from "../CreateGroup/CreateGroup"
 
 const Groups = () => {
   const [showAddGroup, setShowAddGroup] = useState(false)
-
-  const handleGroupCreate = (event) => {
-    event.preventDefault()
-  }
 
   return (
     <div className="group-container">
@@ -21,19 +18,7 @@ const Groups = () => {
       </div>
       {showAddGroup ? (
         <div className="group-content">
-          <button className="back-arrow" onClick={() => setShowAddGroup(false)}>
-            &#8592;
-          </button>
-          <form>
-            <label className="field-label">Start a new Group</label>
-            <input
-              className="add-group-field"
-              placeholder="eg. Trip to Paris"
-            />
-            <button className="create-group-btn" onClick={handleGroupCreate}>
-              Create
-            </button>
-          </form>
+          <CreateGroup setShowAddGroup={setShowAddGroup} />
         </div>
       ) : (
         <div className="group-content">All group contents here!</div>

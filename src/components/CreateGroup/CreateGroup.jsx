@@ -1,5 +1,7 @@
+import { createGroupDocument, findUidByEmail } from "../../utils/firebase-utils"
 import "./CreateGroup.scss"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { UserContext } from "../../context/UserContext"
 
 const defaultGroupForm = {
   groupName: "",
@@ -8,9 +10,32 @@ const defaultGroupForm = {
 
 const CreateGroup = ({ setShowAddGroup }) => {
   const [groupForm, setGroupForm] = useState(defaultGroupForm)
+  const { groupName, memberEmail } = groupForm
 
-  const handleGroupCreate = (event) => {
+  const { activeUser } = useContext(UserContext)
+  const { uid } = activeUser
+
+  const resetGroupForm = () => setGroupForm(defaultGroupForm)
+
+  const handleGroupFormChange = (event) => {
+    const { name, value } = event.target
+    setGroupForm({ ...groupForm, [name]: value })
+  }
+
+  const handleGroupCreate = async (event) => {
     event.preventDefault()
+    const memberId = await findUidByEmail(memberEmail)
+    if (!memberId || memberId === uid) {
+      alert("User not found")
+      return
+    }
+    // Create Group
+    const groupId = crypto.randomUUID()
+    console.log(groupId)
+    createGroupDocument(groupId, groupName, uid, memberId)
+
+    resetGroupForm()
+    setShowAddGroup(false)
   }
 
   return (
@@ -21,9 +46,21 @@ const CreateGroup = ({ setShowAddGroup }) => {
       <form className="group-form" onSubmit={handleGroupCreate}>
         <h2 className="field-header">Start a new Group</h2>
         <label className="field-label">Group Name</label>
-        <input className="add-group-field" placeholder="eg. Trip to Paris" />
+        <input
+          onChange={handleGroupFormChange}
+          name="groupName"
+          value={groupName}
+          className="add-group-field"
+          placeholder="eg. Trip to Paris"
+        />
         <h2 className="field-label">Add a Member</h2>
-        <input type="email" placeholder="Email Address" />
+        <input
+          onChange={handleGroupFormChange}
+          name="memberEmail"
+          value={memberEmail}
+          type="email"
+          placeholder="Email Address"
+        />
         <button className="create-group-btn">Create</button>
       </form>
     </>

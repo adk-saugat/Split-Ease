@@ -5,6 +5,10 @@ import {
   getFirestore,
   setDoc,
   doc,
+  query,
+  where,
+  getDocs,
+  addDoc,
 } from "firebase/firestore"
 import {
   createUserWithEmailAndPassword,
@@ -62,11 +66,46 @@ export const signOutUser = async () => {
 
 export const db = getFirestore(app)
 
-export const createUserDocument = async (uid, displayName, email) => {
-  const collectionRef = collection(db, "user")
+export const findUidByEmail = async (email) => {
+  const usersRef = collection(db, "users")
+  const q = query(usersRef, where("email", "==", email))
+  const querySnapshot = await getDocs(q)
 
+  if (!querySnapshot.empty) {
+    const userId = querySnapshot.docs[0].id
+    return userId
+  }
+  return null
+}
+
+export const documentExists = async (collectionName, uid) => {
+  const collectionRef = collection(db, collectionName)
   const docRef = doc(collectionRef, uid)
   const docSnapshot = await getDoc(docRef)
-  !docSnapshot.exists() &&
-    (await setDoc(doc(collectionRef, uid), { uid, displayName, email }))
+  return docSnapshot.exists()
+}
+
+export const createUserDocument = async (uid, displayName, email) => {
+  !(await documentExists("users", uid)) &&
+    (await setDoc(doc(collection(db, "users"), uid), {
+      uid,
+      displayName,
+      email,
+    }))
+}
+
+export const createGroupDocument = async (
+  groupId,
+  groupName,
+  uid,
+  memberId
+) => {
+  const groupData = {
+    groupId,
+    groupName,
+    members: [uid, memberId],
+  }
+  console.log(groupData)
+  !(await documentExists("groups", groupId)) &&
+    (await setDoc(doc(db, "groups", groupId), groupData))
 }

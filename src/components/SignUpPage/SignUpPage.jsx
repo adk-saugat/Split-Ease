@@ -3,14 +3,15 @@ import {
   emailPasswordSignUp,
   googleSignIn,
   createUserDocument,
-  updateUserProfile,
+  auth,
 } from "../../utils/firebase-utils"
 import "./SignUpPage.scss"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from "../../context/UserContext"
+import { updateProfile } from "firebase/auth"
 
 const defaultFormField = {
-  name: "",
+  userName: "",
   userEmail: "",
   userPassword: "",
   confirmPassword: "",
@@ -18,7 +19,7 @@ const defaultFormField = {
 
 const SignUpPage = () => {
   const [field, setField] = useState(defaultFormField)
-  const { name, userEmail, userPassword, confirmPassword } = field
+  const { userName, userEmail, userPassword, confirmPassword } = field
   const navigate = useNavigate()
 
   const handleFormChange = (event) => {
@@ -30,7 +31,7 @@ const SignUpPage = () => {
     setField(defaultFormField)
   }
 
-  const { activeUser, setActiveUser } = useContext(UserContext)
+  const { setActiveUser } = useContext(UserContext)
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
@@ -42,11 +43,11 @@ const SignUpPage = () => {
 
     try {
       const { user } = await emailPasswordSignUp(userEmail, userPassword)
-      setActiveUser({ ...activeUser, displayName: name })
-      await updateUserProfile(name)
-      const { email, uid } = user
+      await updateProfile(auth.currentUser, { displayName: userName })
+      setActiveUser({ displayName: userName, email: userEmail, uid: user.uid })
+      const { displayName, email, uid } = user
       resetForm()
-      createUserDocument(uid, name, email)
+      createUserDocument(uid, displayName, email)
       navigate("/dashboard")
     } catch (error) {
       console.log(error.code)
@@ -68,8 +69,8 @@ const SignUpPage = () => {
           className="email-input"
           type="text"
           placeholder="Display Name"
-          name="name"
-          value={name}
+          name="userName"
+          value={userName}
           onChange={handleFormChange}
           required
         />

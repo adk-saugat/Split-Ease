@@ -53,11 +53,6 @@ export const emailPasswordSignUp = async (email, password) => {
   return await createUserWithEmailAndPassword(auth, email, password)
 }
 
-export const updateUserProfile = async (name) => {
-  await updateProfile(auth.currentUser, { displayName: name })
-  await auth.currentUser.reload()
-}
-
 export const signOutUser = async () => {
   await signOut(auth)
 }
@@ -66,14 +61,14 @@ export const signOutUser = async () => {
 
 export const db = getFirestore(app)
 
-export const findUidByEmail = async (email) => {
+export const findUserByEmail = async (email) => {
   const usersRef = collection(db, "users")
   const q = query(usersRef, where("email", "==", email))
   const querySnapshot = await getDocs(q)
 
   if (!querySnapshot.empty) {
-    const userId = querySnapshot.docs[0].id
-    return userId
+    const user = querySnapshot.docs[0].data()
+    return user
   }
   return null
 }
@@ -94,18 +89,18 @@ export const createUserDocument = async (uid, displayName, email) => {
     }))
 }
 
-export const createGroupDocument = async (
-  groupId,
-  groupName,
-  uid,
-  memberId
-) => {
-  const groupData = {
-    groupId,
-    groupName,
-    members: [uid, memberId],
-  }
-  console.log(groupData)
+export const createGroupDocument = async (groupId, groupName, user, member) => {
   !(await documentExists("groups", groupId)) &&
-    (await setDoc(doc(db, "groups", groupId), groupData))
+    (await setDoc(doc(db, "groups", groupId), {
+      groupId,
+      groupName,
+      members: [user, member],
+    }))
+}
+
+export const getCollectionData = async (collectionName) => {
+  const collectionRef = collection(db, collectionName)
+  const querySnapshot = await getDocs(collectionRef)
+
+  return querySnapshot.docs.map((doc) => doc.data())
 }

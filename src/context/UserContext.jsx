@@ -1,9 +1,9 @@
-import { onAuthStateChanged, updateProfile } from "firebase/auth"
+import { onAuthStateChanged } from "firebase/auth"
 import { useState, createContext, useEffect } from "react"
-import { auth, signOutUser } from "../utils/firebase-utils"
+import { auth } from "../utils/firebase-utils"
 
 const defaultActiveUser = {
-  displayName: "Guest",
+  displayName: "",
   uid: "",
   email: "",
 }
@@ -16,21 +16,21 @@ export const UserContext = createContext({
 const UserProvider = ({ children }) => {
   const [activeUser, setActiveUser] = useState(defaultActiveUser)
 
-  const value = {
-    activeUser,
-    setActiveUser,
-  }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         const { displayName, uid, email } = currentUser
-        setActiveUser({ displayName, uid, email })
+        setActiveUser({ displayName: displayName, uid: uid, email: email })
       } else {
         setActiveUser(defaultActiveUser)
       }
     })
-    return unsubscribe
+    return () => unsubscribe()
   }, [])
+  const value = {
+    activeUser,
+    setActiveUser,
+  }
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

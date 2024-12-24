@@ -1,4 +1,7 @@
-import { createGroupDocument, findUidByEmail } from "../../utils/firebase-utils"
+import {
+  createGroupDocument,
+  findUserByEmail,
+} from "../../utils/firebase-utils"
 import "./CreateGroup.scss"
 import { useContext, useState } from "react"
 import { UserContext } from "../../context/UserContext"
@@ -13,7 +16,6 @@ const CreateGroup = ({ setShowAddGroup }) => {
   const { groupName, memberEmail } = groupForm
 
   const { activeUser } = useContext(UserContext)
-  const { uid } = activeUser
 
   const resetGroupForm = () => setGroupForm(defaultGroupForm)
 
@@ -24,18 +26,19 @@ const CreateGroup = ({ setShowAddGroup }) => {
 
   const handleGroupCreate = async (event) => {
     event.preventDefault()
-    const memberId = await findUidByEmail(memberEmail)
-    if (!memberId || memberId === uid) {
+    const member = await findUserByEmail(memberEmail)
+    if (!member.uid || member.uid === activeUser.uid) {
       alert("User not found")
       return
     }
-    // Create Group
+
+    //Create Group
     const groupId = crypto.randomUUID()
-    console.log(groupId)
-    createGroupDocument(groupId, groupName, uid, memberId)
+    await createGroupDocument(groupId, groupName, activeUser, member)
 
     resetGroupForm()
     setShowAddGroup(false)
+    window.location.reload()
   }
 
   return (
@@ -47,11 +50,13 @@ const CreateGroup = ({ setShowAddGroup }) => {
         <h2 className="field-header">Start a new Group</h2>
         <label className="field-label">Group Name</label>
         <input
+          type="text"
           onChange={handleGroupFormChange}
           name="groupName"
           value={groupName}
           className="add-group-field"
           placeholder="eg. Trip to Paris"
+          required
         />
         <h2 className="field-label">Add a Member</h2>
         <input
@@ -61,7 +66,9 @@ const CreateGroup = ({ setShowAddGroup }) => {
           type="email"
           placeholder="Email Address"
         />
-        <button className="create-group-btn">Create</button>
+        <button type="submit" className="create-group-btn">
+          Create
+        </button>
       </form>
     </>
   )

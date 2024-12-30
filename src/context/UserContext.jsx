@@ -17,10 +17,14 @@ const UserProvider = ({ children }) => {
   const [activeUser, setActiveUser] = useState(defaultActiveUser)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         const { displayName, uid, email } = currentUser
-        setActiveUser({ displayName: displayName, uid: uid, email: email })
+        setActiveUser({
+          displayName: displayName,
+          uid: uid,
+          email: email,
+        })
       } else {
         setActiveUser(defaultActiveUser)
       }

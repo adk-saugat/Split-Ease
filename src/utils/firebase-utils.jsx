@@ -9,6 +9,8 @@ import {
   where,
   getDocs,
   addDoc,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore"
 import {
   createUserWithEmailAndPassword,
@@ -73,6 +75,13 @@ export const findUserByEmail = async (email) => {
   return null
 }
 
+export const getCollectionData = async (collectionName) => {
+  const collectionRef = collection(db, collectionName)
+  const querySnapshot = await getDocs(collectionRef)
+
+  return querySnapshot.docs.map((doc) => doc.data())
+}
+
 export const documentExists = async (collectionName, uid) => {
   const collectionRef = collection(db, collectionName)
   const docRef = doc(collectionRef, uid)
@@ -86,21 +95,27 @@ export const createUserDocument = async (uid, displayName, email) => {
       uid,
       displayName,
       email,
+      groups: [],
     }))
 }
 
 export const createGroupDocument = async (groupId, groupName, user, member) => {
-  !(await documentExists("groups", groupId)) &&
-    (await setDoc(doc(db, "groups", groupId), {
+  if (!(await documentExists("groups", groupId))) {
+    await setDoc(doc(db, "groups", groupId), {
       groupId,
       groupName,
-      members: [user, member],
-    }))
-}
+      members: [
+        { uid: user.uid, displayName: user.displayName },
+        { uid: member.uid, displayName: member.displayName },
+      ],
+    })
+    const userIds = [user.uid, member.uid]
 
-export const getCollectionData = async (collectionName) => {
-  const collectionRef = collection(db, collectionName)
-  const querySnapshot = await getDocs(collectionRef)
-
-  return querySnapshot.docs.map((doc) => doc.data())
+    userIds.forEach(async (userId) => {
+      const userRef = doc(db, "users", userId)
+      await updateDoc(userRef, {
+        groups: arrayUnion({ groupId, groupName }),
+      })
+    })
+  }
 }

@@ -35,10 +35,8 @@ const CreateGroup = ({ setShowAddGroup }) => {
     //Create Group
     const groupId = crypto.randomUUID()
     await createGroupDocument(groupId, groupName, activeUser, member)
-
     resetGroupForm()
     setShowAddGroup(false)
-    window.location.reload()
   }
 
   return (

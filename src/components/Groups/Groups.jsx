@@ -1,24 +1,13 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import "./Groups.scss"
 import CreateGroup from "../CreateGroup/CreateGroup"
-import { getCollectionData } from "../../utils/firebase-utils"
+import { GroupContext } from "../../context/GroupContext"
 
 const Groups = () => {
   const [showAddGroup, setShowAddGroup] = useState(false)
-  const [groups, setGroups] = useState([])
+  const { groups } = useContext(GroupContext)
 
-  useEffect(() => {
-    return async () => {
-      const groupsData = await getCollectionData("groups")
-      const groups = groupsData.map((group) => {
-        return {
-          groupName: group.groupName,
-          groupId: group.groupId,
-        }
-      })
-      setGroups(groups)
-    }
-  }, [])
+  console.log(groups)
   return (
     <div className="group-container">
       <div className="group-dashboard">
@@ -28,9 +17,9 @@ const Groups = () => {
         <div className="group-info">
           <h2 className="group-text">Groups</h2>
           <div className="group-list">
-            {groups.map((group) => (
-              <li key={group.groupId}>{group.groupName}</li>
-            ))}
+            {groups.map(({ groupId, groupName }) => {
+              return <p key={groupId}>{groupName}</p>
+            })}
           </div>
         </div>
       </div>

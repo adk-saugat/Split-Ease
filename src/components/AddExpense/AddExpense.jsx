@@ -20,6 +20,7 @@ const AddExpense = ({ setTab }) => {
 
   const handleAddExpense = (event) => {
     event.preventDefault()
+    console.log("added expense")
     setTab("groups")
   }
 

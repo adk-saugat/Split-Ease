@@ -26,7 +26,10 @@ const Groups = () => {
                 <div key={groupId}>
                   <button
                     className="group-name-btn"
-                    onClick={() => handleShowGroup(groupName)}
+                    onClick={() => {
+                      setShowAddGroup(false)
+                      handleShowGroup(groupName)
+                    }}
                   >
                     &#9750; {groupName}
                   </button>

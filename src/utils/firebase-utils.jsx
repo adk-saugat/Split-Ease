@@ -99,18 +99,32 @@ export const createUserDocument = async (uid, displayName, email) => {
     }))
 }
 
-export const createGroupDocument = async (groupId, groupName, user, member) => {
+export const createGroupDocument = async (
+  groupId,
+  groupName,
+  user,
+  ...members
+) => {
+  let membersObjectArray = []
+  let userIds = [user.uid]
+
+  for (const member of members) {
+    membersObjectArray.push({
+      uid: member.uid,
+      displayName: member.displayName,
+    })
+    userIds.push(member.uid)
+  }
   if (!(await documentExists("groups", groupId))) {
     await setDoc(doc(db, "groups", groupId), {
       groupId,
       groupName,
       members: [
         { uid: user.uid, displayName: user.displayName },
-        { uid: member.uid, displayName: member.displayName },
+        ...membersObjectArray,
       ],
       expenses: [],
     })
-    const userIds = [user.uid, member.uid]
 
     userIds.forEach(async (userId) => {
       const userRef = doc(db, "users", userId)

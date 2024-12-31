@@ -42,6 +42,19 @@
     padding: 5px;
   }
 
+  .add-person-btn {
+    width: fit-content;
+    color: #0096c7;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 50ms;
+
+    &:hover {
+      color: #0077b6;
+      text-decoration: underline;
+    }
+  }
+
   .create-group-btn {
     width: 75%;
     border: 1px solid #212529;

@@ -5,9 +5,13 @@ import { GroupContext } from "../../context/GroupContext"
 
 const Groups = () => {
   const [showAddGroup, setShowAddGroup] = useState(false)
+  const [activeGroup, setActiveGroup] = useState(null)
   const { groups } = useContext(GroupContext)
 
-  console.log(groups)
+  const handleShowGroup = (groupId) => {
+    setActiveGroup(groupId)
+  }
+
   return (
     <div className="group-container">
       <div className="group-dashboard">
@@ -18,7 +22,16 @@ const Groups = () => {
           <h2 className="group-text">Groups</h2>
           <div className="group-list">
             {groups.map(({ groupId, groupName }) => {
-              return <p key={groupId}>{groupName}</p>
+              return (
+                <div key={groupId}>
+                  <button
+                    className="group-name-btn"
+                    onClick={() => handleShowGroup(groupName)}
+                  >
+                    &#9750; {groupName}
+                  </button>
+                </div>
+              )
             })}
           </div>
         </div>
@@ -28,7 +41,9 @@ const Groups = () => {
           <CreateGroup setShowAddGroup={setShowAddGroup} />
         </div>
       ) : (
-        <div className="group-content">All group contents here!</div>
+        <div className="group-content">
+          {activeGroup !== null ? activeGroup : "Group Content!"}
+        </div>
       )}
     </div>
   )

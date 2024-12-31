@@ -63,6 +63,7 @@ const CreateGroup = ({ setShowAddGroup }) => {
           value={memberEmail}
           type="email"
           placeholder="Email Address"
+          className="add-member-field"
         />
         <button type="submit" className="create-group-btn">
           Create

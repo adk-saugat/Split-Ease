@@ -14,10 +14,10 @@ const GroupProvider = ({ children }) => {
   useEffect(() => {
     const fetchGroups = async () => {
       const currentUser = await getCollectionData("users")
-      const userGroups = currentUser.find(
-        (user) => user.uid === activeUser.uid
-      ).groups
-      setGroups(userGroups)
+      const user = currentUser.find((user) => user.uid === activeUser.uid)
+      const userGroups = user?.groups || []
+      JSON.stringify(userGroups) !== JSON.stringify(groups) &&
+        setGroups(userGroups)
     }
     fetchGroups()
   })

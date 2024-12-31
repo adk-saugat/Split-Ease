@@ -1,7 +1,6 @@
 .add-expense-container {
   display: flex;
   justify-content: center;
-  width: 60%;
   padding: 2rem;
   border: 2px solid rgba(17, 17, 26, 0.1);
   border-radius: 5px;
@@ -10,19 +9,30 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    width: 100%;
 
-    .desc-label {
-      font-size: 1.1rem;
+    .desc-label,
+    .select-label,
+    .expense-label {
+      font-size: 1rem;
+      margin: 0px;
     }
 
-    .expense-label {
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
+    .desc-field,
+    .expense-field {
+      font-size: 1rem;
+      padding: 10px;
+    }
+
+    .select-group {
+      margin: 5px 0px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
 
     .paid-text {
       text-align: center;
-      padding: 0.8rem 0rem;
     }
 
     .add-expense-btn {

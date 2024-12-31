@@ -30,12 +30,33 @@
   .field-label {
     display: block;
     font-size: 1rem;
-    margin: 10px 0px;
+    margin-top: 10px;
     font-weight: 500;
   }
 
-  .add-group-field {
+  .add-group-field,
+  .add-member-field {
+    width: 75%;
     font-size: 1rem;
+    margin-top: 5px;
     padding: 5px;
+  }
+
+  .create-group-btn {
+    width: 75%;
+    border: 1px solid #212529;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: 100ms;
+
+    &:hover {
+      background-color: #212529;
+      color: white;
+    }
   }
 }

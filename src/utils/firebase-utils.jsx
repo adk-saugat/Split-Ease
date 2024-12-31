@@ -108,6 +108,7 @@ export const createGroupDocument = async (groupId, groupName, user, member) => {
         { uid: user.uid, displayName: user.displayName },
         { uid: member.uid, displayName: member.displayName },
       ],
+      expenses: [],
     })
     const userIds = [user.uid, member.uid]
 

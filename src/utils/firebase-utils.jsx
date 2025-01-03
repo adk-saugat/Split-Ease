@@ -8,7 +8,6 @@ import {
   query,
   where,
   getDocs,
-  addDoc,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore"
@@ -19,7 +18,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -134,3 +132,5 @@ export const createGroupDocument = async (
     })
   }
 }
+
+export const createExpenseDocument = async () => {}

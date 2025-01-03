@@ -49,7 +49,8 @@ const CreateGroup = ({ setShowAddGroup }) => {
       )
       console.log("can create group")
       console.log(membersInfoArray)
-      // Continue with group creation...
+
+      // Create group
       const groupId = crypto.randomUUID()
       await createGroupDocument(
         groupId,

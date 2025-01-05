@@ -2,7 +2,10 @@ import { useContext, useState } from "react"
 import "./AddExpense.scss"
 import { GroupContext } from "../../context/GroupContext"
 import { UserContext } from "../../context/UserContext"
-import { getCollectionData } from "../../utils/firebase-utils"
+import {
+  createExpenseDocument,
+  getCollectionData,
+} from "../../utils/firebase-utils"
 
 const defaultExpenseForm = {
   description: "",
@@ -39,13 +42,36 @@ const AddExpense = ({ setTab }) => {
     const { name } = event.target
     setSplitMembers({ ...splitMembers, [name]: !splitMembers[name] })
   }
-  console.log(splitMembers)
+  // console.log(splitMembers)
 
-  const handleAddExpense = (event) => {
+  const handleAddExpense = async (event) => {
     event.preventDefault()
-    
-    // Add expense to group
 
+    const splitBetween = Object.keys(splitMembers).map((member) => {
+      if (splitMembers[member]) {
+        return member
+      }
+    })
+
+    // Add expense to group
+    const expenseId = crypto.randomUUID()
+    const now = new Date()
+    const date = {
+      day: now.getDate(),
+      month: now.toLocaleString("default", { month: "short" }),
+      year: now.getFullYear(),
+    }
+
+    const newExpense = {
+      expenseId,
+      groupId: IdGroup,
+      amount,
+      description,
+      paidBy: activeUser.uid,
+      splitBetween,
+      date,
+    }
+    await createExpenseDocument(newExpense)
 
     setTab("groups")
   }

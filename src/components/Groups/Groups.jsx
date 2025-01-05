@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react"
 import "./Groups.scss"
 import CreateGroup from "../CreateGroup/CreateGroup"
 import { GroupContext } from "../../context/GroupContext"
+import ActiveGroup from "../ActiveGroup/ActiveGroup"
 
 const Groups = () => {
   const [showAddGroup, setShowAddGroup] = useState(false)
@@ -28,7 +29,7 @@ const Groups = () => {
                     className="group-name-btn"
                     onClick={() => {
                       setShowAddGroup(false)
-                      handleShowGroup(groupName)
+                      handleShowGroup(groupId)
                     }}
                   >
                     &#9750; {groupName}
@@ -45,7 +46,11 @@ const Groups = () => {
         </div>
       ) : (
         <div className="group-content">
-          {activeGroup !== null ? activeGroup : "Group Content!"}
+          {activeGroup !== null ? (
+            <ActiveGroup activeGroupId={activeGroup || ""} />
+          ) : (
+            "Group Content!"
+          )}
         </div>
       )}
     </div>

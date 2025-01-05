@@ -87,6 +87,17 @@ export const documentExists = async (collectionName, uid) => {
   return docSnapshot.exists()
 }
 
+export const getDocument = async (collectionName, documentId) => {
+  const docRef = doc(db, collectionName, documentId)
+  const docSnapshot = await getDoc(docRef)
+
+  if (docSnapshot.exists()) {
+    return docSnapshot.data()
+  } else {
+    throw new Error("Document does not exist!")
+  }
+}
+
 export const createUserDocument = async (uid, displayName, email) => {
   !(await documentExists("users", uid)) &&
     (await setDoc(doc(collection(db, "users"), uid), {
@@ -133,4 +144,14 @@ export const createGroupDocument = async (
   }
 }
 
-export const createExpenseDocument = async () => {}
+export const createExpenseDocument = async (expense) => {
+  const { expenseId, groupId, description } = expense
+  if (!(await documentExists("expenses", expenseId))) {
+    await setDoc(doc(collection(db, "expenses"), expenseId), expense)
+
+    const groupRef = doc(db, "groups", groupId)
+    await updateDoc(groupRef, {
+      expenses: arrayUnion({ description, expenseId }),
+    })
+  }
+}

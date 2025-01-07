@@ -1,24 +1,28 @@
-import { useEffect, useState } from "react"
-import { getDocument } from "../../utils/firebase-utils"
+import "./ActiveGroup.scss"
+import ExpenseCard from "../ExpenseCard/ExpenseCard"
+import { useContext, useEffect } from "react"
+import { ExpenseContext } from "../../context/ExpenseContext"
 
-const ActiveGroup = ({ activeGroupId }) => {
-  const [activeGroupData, setActiveGroupData] = useState({})
+const ActiveGroup = ({ activeGroup }) => {
+  const { groupId, groupName } = activeGroup
+  const { expenses, fetchGroupExpense } = useContext(ExpenseContext)
 
-  const fetchGroupExpense = async () => {
-    const groupData = await getDocument("groups", activeGroupId)
-    setActiveGroupData(groupData)
-  }
   useEffect(() => {
-    fetchGroupExpense()
-  }, [activeGroupId])
+    fetchGroupExpense(groupId)
+  }, [activeGroup])
 
   return (
-    <>
+    <div className="active-group-content">
       <div className="active-group-header">
-        <h1 className="active-group-title">{activeGroupData.groupName}</h1>
+        <h1 className="active-group-title">{groupName}</h1>
       </div>
-      <div className="expense-list-container"></div>
-    </>
+      <div className="expense-list-container">
+        {expenses &&
+          expenses.map(({ expenseId }) => {
+            return <ExpenseCard key={expenseId} expenseId={expenseId} />
+          })}
+      </div>
+    </div>
   )
 }
 

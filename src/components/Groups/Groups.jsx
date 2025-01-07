@@ -9,8 +9,8 @@ const Groups = () => {
   const [activeGroup, setActiveGroup] = useState(null)
   const { groups } = useContext(GroupContext)
 
-  const handleShowGroup = (groupId) => {
-    setActiveGroup(groupId)
+  const handleShowGroup = ({ groupId, groupName }) => {
+    setActiveGroup({ groupId, groupName })
   }
 
   return (
@@ -29,7 +29,7 @@ const Groups = () => {
                     className="group-name-btn"
                     onClick={() => {
                       setShowAddGroup(false)
-                      handleShowGroup(groupId)
+                      handleShowGroup({ groupId, groupName })
                     }}
                   >
                     &#9750; {groupName}
@@ -47,7 +47,7 @@ const Groups = () => {
       ) : (
         <div className="group-content">
           {activeGroup !== null ? (
-            <ActiveGroup activeGroupId={activeGroup || ""} />
+            <ActiveGroup activeGroup={activeGroup || {}} />
           ) : (
             "Group Content!"
           )}

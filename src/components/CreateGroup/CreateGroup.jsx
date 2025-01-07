@@ -5,6 +5,7 @@ import {
 import "./CreateGroup.scss"
 import { useContext, useState } from "react"
 import { UserContext } from "../../context/UserContext"
+import { GroupContext } from "../../context/GroupContext"
 
 const CreateGroup = ({ setShowAddGroup }) => {
   const [groupName, setGroupName] = useState("")
@@ -12,6 +13,7 @@ const CreateGroup = ({ setShowAddGroup }) => {
   const [addPersonCount, setAddPersonCount] = useState(1)
 
   const { activeUser } = useContext(UserContext)
+  const { fetchGroups } = useContext(GroupContext)
 
   const resetGroupForm = () => {
     setGroupName("")
@@ -47,8 +49,6 @@ const CreateGroup = ({ setShowAddGroup }) => {
           }
         })
       )
-      console.log("can create group")
-      console.log(membersInfoArray)
 
       // Create group
       const groupId = crypto.randomUUID()
@@ -58,11 +58,11 @@ const CreateGroup = ({ setShowAddGroup }) => {
         activeUser,
         ...membersInfoArray
       )
+      fetchGroups()
       resetGroupForm()
       setShowAddGroup(false)
     } catch (error) {
       alert(error.message)
-      console.log("cannot create group")
     }
   }
 

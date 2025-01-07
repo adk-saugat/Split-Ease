@@ -1,0 +1,13 @@
+.active-group-content {
+  padding: 0.5rem;
+
+  .active-group-header {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(17, 17, 26, 0.1);
+
+    .active-group-title {
+      font-size: 1.5rem;
+    }
+  }
+}

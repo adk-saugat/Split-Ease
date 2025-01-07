@@ -43,12 +43,26 @@
     align-items: center;
     justify-content: center;
 
-    .lent {
-      font-size: 0.7rem;
+    .lent-container {
+      .lent {
+        color: green;
+        font-size: 0.8rem;
+      }
+
+      .owe {
+        color: red;
+        font-size: 0.8rem;
+      }
     }
 
-    .lent-amt {
-      font-size: 1rem;
+    .lent-amt-container {
+      .lent-amt {
+        color: green;
+      }
+
+      .owe-amt {
+        color: red;
+      }
     }
   }
 }

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+
 import "./ExpenseCard.scss"
 import { getDocument } from "../../utils/firebase-utils"
+import { UserContext } from "../../context/UserContext"
 
 const ExpenseCard = ({ expenseId }) => {
   const [expense, setExpense] = useState({
@@ -9,18 +11,28 @@ const ExpenseCard = ({ expenseId }) => {
     description: "",
     paidBy: "",
   })
+  const [paidByUser, setPaidByUser] = useState(expense.paidBy)
+  const { activeUser } = useContext(UserContext)
+  const { displayName } = activeUser
+
   const { amount, date, description, paidBy } = expense
   const { month, day } = date
 
   const fetchDatabaseInfo = async () => {
-    const expenseRef = await getDocument("expenses", expenseId)
-    setExpense(expenseRef)
+    if (expenseId) {
+      const expenseRef = await getDocument("expenses", expenseId)
+      setExpense(expenseRef)
+
+      if (expenseRef.paidBy) {
+        const userRef = await getDocument("users", expenseRef.paidBy)
+        setPaidByUser(userRef.displayName)
+      }
+    }
   }
 
   useEffect(() => {
     fetchDatabaseInfo()
-  }, [])
-  console.log(expense)
+  }, [expenseId])
 
   return (
     <div className="expense-card-container">
@@ -30,11 +42,29 @@ const ExpenseCard = ({ expenseId }) => {
       </div>
       <div className="desc-amt-container">
         <h2 className="description">{description}</h2>
-        <p className="amount">Saugat paid ${amount}</p>
+        <p className="amount">
+          {paidByUser === displayName ? "You" : paidByUser} paid ${amount}
+        </p>
       </div>
       <div className="paid-container">
-        <div className="lent">You lent</div>
-        <div className="lent-amt">$5.89</div>
+        <div className="lent-container">
+          {displayName === paidByUser ? (
+            <span className="lent">You lent</span>
+          ) : (
+            <span className="owe">You owe</span>
+          )}
+        </div>
+        <div className="lent-amt-container">
+          {displayName === paidByUser ? (
+            <span className="lent-amt">
+              ${(Number(amount) * (2 / 3)).toFixed(2)}
+            </span>
+          ) : (
+            <span className="owe-amt">
+              ${(Number(amount) * (1 / 3)).toFixed(2)}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )

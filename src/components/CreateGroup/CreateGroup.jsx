@@ -6,6 +6,7 @@ import "./CreateGroup.scss"
 import { useContext, useState } from "react"
 import { UserContext } from "../../context/UserContext"
 import { GroupContext } from "../../context/GroupContext"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 
 const CreateGroup = ({ setShowAddGroup }) => {
   const [groupName, setGroupName] = useState("")
@@ -68,9 +69,10 @@ const CreateGroup = ({ setShowAddGroup }) => {
 
   return (
     <>
-      <button className="back-arrow" onClick={() => setShowAddGroup(false)}>
-        &#8592;
-      </button>
+      <ArrowBackIcon
+        className="back-arrow"
+        onClick={() => setShowAddGroup(false)}
+      />
       <form className="group-form" onSubmit={handleGroupCreate}>
         <h2 className="field-header">Start a new Group</h2>
         <label className="field-label">Group Name</label>

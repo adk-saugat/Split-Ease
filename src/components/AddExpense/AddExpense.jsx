@@ -42,7 +42,6 @@ const AddExpense = ({ setTab }) => {
     const { name } = event.target
     setSplitMembers({ ...splitMembers, [name]: !splitMembers[name] })
   }
-  // console.log(splitMembers)
 
   const handleAddExpense = async (event) => {
     event.preventDefault()

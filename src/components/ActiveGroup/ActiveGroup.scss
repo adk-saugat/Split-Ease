@@ -1,13 +1,67 @@
 .active-group-content {
   padding: 0.5rem;
+  position: relative;
 
   .active-group-header {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     margin-bottom: 1rem;
     border-bottom: 2px solid rgba(17, 17, 26, 0.1);
 
     .active-group-title {
       font-size: 1.5rem;
+    }
+
+    .delete-btn {
+      cursor: pointer;
+    }
+  }
+
+  .delete-menu-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    transition: 100ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .delete-box {
+      width: 400px;
+      height: 150px;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+
+      .delete-text {
+        text-align: center;
+        font-size: 1.3rem;
+        margin-top: 20px;
+      }
+
+      .delete-buttons-container {
+        display: flex;
+        justify-content: space-around;
+
+        .cancel-btn,
+        .delete-btn-yes {
+          border: none;
+          background-color: white;
+          font-size: 1.2rem;
+          cursor: pointer;
+          padding: 5px;
+          transition: 100ms;
+
+          &:hover {
+            background-color: #d3d3d3;
+          }
+        }
+      }
     }
   }
 }

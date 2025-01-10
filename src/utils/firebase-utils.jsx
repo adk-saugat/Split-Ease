@@ -10,6 +10,7 @@ import {
   getDocs,
   updateDoc,
   arrayUnion,
+  deleteDoc,
 } from "firebase/firestore"
 import {
   createUserWithEmailAndPassword,
@@ -153,5 +154,34 @@ export const createExpenseDocument = async (expense) => {
     await updateDoc(groupRef, {
       expenses: arrayUnion({ description, expenseId }),
     })
+  }
+}
+
+export const deleteGroup = async (activeGroupId) => {
+  try {
+    const groupData = await getDocument("groups", activeGroupId)
+    // Deleting Group Data from User
+    groupData.members.map(async (user) => {
+      const userData = await getDocument("users", user.uid)
+
+      const newGroup = userData.groups.filter((group) => {
+        if (group.groupId !== activeGroupId) {
+          return true
+        }
+      })
+      const userDocRef = doc(db, "users", user.uid)
+      await updateDoc(userDocRef, {
+        groups: newGroup,
+      })
+    })
+    // Deleting Groups Expenses
+    groupData.expenses.map(async (expense) => {
+      await deleteDoc(doc(db, "expenses", expense.expenseId))
+    })
+    // Deleting the Group Document
+    await deleteDoc(doc(db, "groups", activeGroupId))
+    location.reload()
+  } catch (error) {
+    console.log(error)
   }
 }

@@ -37,6 +37,8 @@
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      box-shadow: rgba(217, 217, 226, 0.1) 0px 4px 16px,
+        rgba(17, 17, 26, 0.05) 0px 8px 32px;
 
       .delete-text {
         text-align: center;

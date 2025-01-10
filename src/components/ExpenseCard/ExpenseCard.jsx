@@ -12,11 +12,14 @@ const ExpenseCard = ({ expenseId }) => {
     paidBy: "",
   })
   const [paidByUser, setPaidByUser] = useState(expense.paidBy)
+
   const { activeUser } = useContext(UserContext)
   const { displayName } = activeUser
 
-  const { amount, date, description, paidBy } = expense
+  const { amount, date, description, paidBy, splitBetween } = expense
   const { month, day } = date
+
+  const memberNum = splitBetween?.length
 
   const fetchDatabaseInfo = async () => {
     if (expenseId) {
@@ -57,11 +60,15 @@ const ExpenseCard = ({ expenseId }) => {
         <div className="lent-amt-container">
           {displayName === paidByUser ? (
             <span className="lent-amt">
-              ${(Number(amount) * (2 / 3)).toFixed(2)}
+              $
+              {(
+                Number(amount) *
+                (Number(memberNum - 1) / Number(memberNum))
+              ).toFixed(2)}
             </span>
           ) : (
             <span className="owe-amt">
-              ${(Number(amount) * (1 / 3)).toFixed(2)}
+              ${(Number(amount) * (1 / Number(memberNum))).toFixed(2)}
             </span>
           )}
         </div>

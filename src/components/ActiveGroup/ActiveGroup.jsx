@@ -3,6 +3,7 @@ import ExpenseCard from "../ExpenseCard/ExpenseCard"
 import { useContext, useEffect, useState } from "react"
 import { ExpenseContext } from "../../context/ExpenseContext"
 import DeleteIcon from "@mui/icons-material/Delete"
+import { deleteGroup } from "../../utils/firebase-utils"
 
 const ActiveGroup = ({ activeGroup }) => {
   const [showDeleteMenu, setShowDeleteMenu] = useState(false)
@@ -12,7 +13,12 @@ const ActiveGroup = ({ activeGroup }) => {
   useEffect(() => {
     fetchGroupExpense(groupId)
   }, [activeGroup])
-  console.log(showDeleteMenu)
+
+  const handleGroupDelete = async () => {
+    // console.log(activeGroup)
+    await deleteGroup(activeGroup.groupId)
+    setShowDeleteMenu(false)
+  }
   return (
     <div className="active-group-content">
       <div className="active-group-header">
@@ -39,7 +45,9 @@ const ActiveGroup = ({ activeGroup }) => {
               >
                 Cancel
               </button>
-              <button className="delete-btn-yes">Yes</button>
+              <button className="delete-btn-yes" onClick={handleGroupDelete}>
+                Yes
+              </button>
             </div>
           </div>
         </div>

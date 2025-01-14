@@ -4,6 +4,10 @@ import "./ExpenseCard.scss"
 import { getDocument } from "../../utils/firebase-utils"
 import { UserContext } from "../../context/UserContext"
 
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
+
 const ExpenseCard = ({ expenseId }) => {
   const [expense, setExpense] = useState({
     amount: "",
@@ -12,12 +16,13 @@ const ExpenseCard = ({ expenseId }) => {
     paidBy: "",
   })
   const [paidByUser, setPaidByUser] = useState(expense.paidBy)
+  const [showExpenseMenu, setShowExpenseMenu] = useState(false)
 
   const { activeUser } = useContext(UserContext)
   const { displayName } = activeUser
 
   const { amount, date, description, paidBy, splitBetween } = expense
-  const { month, day } = date
+  const { month, day, year } = date
 
   const memberNum = splitBetween?.length
 
@@ -38,7 +43,12 @@ const ExpenseCard = ({ expenseId }) => {
   }, [expenseId])
 
   return (
-    <div className="expense-card-container">
+    <div
+      className="expense-card-container"
+      onClick={() => {
+        setShowExpenseMenu(true)
+      }}
+    >
       <div className="date-container">
         <div className="month">{month}</div>
         <div className="day">{day < 10 ? `0${day}` : day}</div>
@@ -73,6 +83,34 @@ const ExpenseCard = ({ expenseId }) => {
           )}
         </div>
       </div>
+      {showExpenseMenu && (
+        <div className="expense-menu-container">
+          <div className="expense-box">
+            <div className="expense-nav">
+              <ArrowBackIcon
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowExpenseMenu(false)
+                }}
+              />
+              <span>
+                <DeleteIcon className="expense-delete-icon" />
+                <EditIcon />
+              </span>
+            </div>
+            <div className="expense-body">
+              <div className="exp-body-header">
+                <h2>{description}</h2>
+                <h1>${amount}</h1>
+                <p>
+                  Added by {paidByUser} on {month} {day}, {year}
+                </p>
+              </div>
+              <div className="exp-body-paidBy"></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

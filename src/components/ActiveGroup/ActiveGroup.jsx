@@ -31,7 +31,12 @@ const ActiveGroup = ({ activeGroup }) => {
       <div className="expense-list-container">
         {expenses &&
           expenses.map(({ expenseId }) => {
-            return <ExpenseCard key={expenseId} expenseId={expenseId} />
+            return (
+              <ExpenseCard
+                expenseId={expenseId}
+                key={expenseId}
+              />
+            )
           })}
       </div>
       {showDeleteMenu && (

@@ -74,15 +74,14 @@
     width: 100%;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
-    transition: 100ms;
     display: flex;
     align-items: center;
     justify-content: center;
 
     .expense-box {
-      width: 400px;
-      height: 500px;
-      background-color: white;
+      width: 300px;
+      height: 350px;
+      background-color: #eee;
       box-shadow: rgba(217, 217, 226, 0.1) 0px 4px 16px,
         rgba(17, 17, 26, 0.05) 0px 8px 32px;
 
@@ -94,6 +93,42 @@
 
         .expense-delete-icon {
           margin-right: 1rem;
+        }
+      }
+
+      .expense-body {
+        margin: 1.5rem;
+
+        .exp-body-header {
+          border-bottom: 1px solid #ddd;
+          padding-bottom: 1rem;
+          margin-bottom: 1rem;
+          .exp-desc {
+            font-size: 1.2rem;
+            font-weight: 500;
+          }
+
+          .exp-amount {
+            color: #888;
+            font-size: 1.7rem;
+          }
+
+          .exp-paidBy {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+          }
+        }
+
+        .exp-body-paidBy {
+          .expense-user-owe {
+            font-size: 0.8rem;
+            margin: 0.3rem 0px;
+            margin-left: 0.5rem;
+
+            .arrow {
+              margin-right: 5px;
+            }
+          }
         }
       }
     }

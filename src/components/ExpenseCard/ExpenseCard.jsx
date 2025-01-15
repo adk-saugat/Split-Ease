@@ -17,6 +17,7 @@ const ExpenseCard = ({ expenseId }) => {
   })
   const [paidByUser, setPaidByUser] = useState(expense.paidBy)
   const [showExpenseMenu, setShowExpenseMenu] = useState(false)
+  const [splitBetweenUsers, setSplitBetweenUsers] = useState([])
 
   const { activeUser } = useContext(UserContext)
   const { displayName } = activeUser
@@ -35,12 +36,21 @@ const ExpenseCard = ({ expenseId }) => {
         const userRef = await getDocument("users", expenseRef.paidBy)
         setPaidByUser(userRef.displayName)
       }
+      let userArray = []
+
+      expenseRef?.splitBetween?.map(async (userId) => {
+        const userRef = await getDocument("users", userId)
+        userArray.push({ displayName: userRef.displayName, uid: userId })
+      })
+      setSplitBetweenUsers(userArray)
     }
   }
 
   useEffect(() => {
     fetchDatabaseInfo()
   }, [expenseId])
+
+  console.log(splitBetweenUsers)
 
   return (
     <div
@@ -100,13 +110,25 @@ const ExpenseCard = ({ expenseId }) => {
             </div>
             <div className="expense-body">
               <div className="exp-body-header">
-                <h2>{description}</h2>
-                <h1>${amount}</h1>
-                <p>
+                <h2 className="exp-desc">{description}</h2>
+                <p className="exp-amount">${amount}</p>
+                <p className="exp-paidBy">
                   Added by {paidByUser} on {month} {day}, {year}
                 </p>
               </div>
-              <div className="exp-body-paidBy"></div>
+              <div className="exp-body-paidBy">
+                <div>
+                  {paidByUser} paid ${amount}.
+                </div>
+                {splitBetweenUsers.map(({ displayName, uid }) => {
+                  return (
+                    <div className="expense-user-owe" key={uid}>
+                      <span className="arrow">&#11169;</span> {displayName} owes
+                      ${(Number(amount) / memberNum).toFixed(2)}.
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

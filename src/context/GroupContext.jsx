@@ -22,8 +22,10 @@ const GroupProvider = ({ children }) => {
 
   useEffect(() => {
     fetchGroups()
-  })
+  }, [])
+
   const value = { groups, setGroups, fetchGroups }
+
   return <GroupContext.Provider value={value}>{children}</GroupContext.Provider>
 }
 
